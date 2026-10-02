@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#07111f">
+
+<title>For You 🩵</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&family=Playfair+Display:ital,wght@400;500;600&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 20% 15%, rgba(90, 180, 255, .13), transparent 30%),
+        radial-gradient(circle at 80% 80%, rgba(130, 80, 255, .12), transparent 30%),
+        linear-gradient(145deg, #030811, #071525 48%, #050a15);
+    color: #fff;
+    font-family: "Cairo", sans-serif;
+    overflow-x: hidden;
+}
+
+/* =========================
+   BACKGROUND
+========================= */
+
+.background {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.glow {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: .18;
+    animation: floatGlow 9s ease-in-out infinite alternate;
+}
+
+.glow.one {
+    background: #46caff;
+    top: -80px;
+    left: -70px;
+}
+
+.glow.two {
+    background: #8b5cf6;
+    right: -100px;
+    bottom: -80px;
+    animation-delay: 2s;
+}
+
+.glow.three {
+    background: #3b82f6;
+    left: 40%;
+    top: 45%;
+    width: 170px;
+    height: 170px;
+    opacity: .09;
+}
+
+@keyframes floatGlow {
+    from {
+        transform: translate(0, 0) scale(1);
+    }
+    to {
+        transform: translate(30px, -25px) scale(1.15);
+    }
+}
+
+.stars {
+    position: absolute;
+    inset: 0;
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    opacity: .45;
+    animation: twinkle 3s infinite ease-in-out;
+}
+
+@keyframes twinkle {
+    0%,100% { opacity: .15; transform: scale(.8); }
+    50% { opacity: .9; transform: scale(1.5); }
+}
+
+/* =========================
+   APP
+========================= */
+
+.app {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+}
+
+/* =========================
+   INTRO
+========================= */
+
+.intro {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 25px;
+    text-align: center;
+    transition: opacity 1s ease, transform 1s ease;
+}
+
+.intro.hide {
+    opacity: 0;
+    transform: scale(1.05);
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+}
+
+.intro-card {
+    width: min(470px, 100%);
+    padding: 45px 28px;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 30px;
+    background: rgba(255,255,255,.055);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    box-shadow:
+        0 25px 80px rgba(0,0,0,.4),
+        inset 0 1px 0 rgba(255,255,255,.08);
+    animation: cardIn 1.2s ease forwards;
+}
+
+@keyframes cardIn {
+    from {
+        opacity: 0;
+        transform: translateY(35px) scale(.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.small-label {
+    color: #9edfff;
+    font-size: 13px;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+.intro-heart {
+    font-size: 55px;
+    display: block;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 20px rgba(80,200,255,.35));
+    animation: heartPulse 2.5s infinite;
+}
+
+@keyframes heartPulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+
+.intro h1 {
+    font-family: "Playfair Display", serif;
+    font-size: clamp(38px, 10vw, 62px);
+    font-weight: 500;
+    direction: ltr;
+    margin-bottom: 12px;
+}
+
+.intro h1 span {
+    color: #9cddff;
+}
+
+.intro p {
+    color: rgba(255,255,255,.68);
+    font-size: 15px;
+    line-height: 1.9;
+    margin-bottom: 30px;
+}
+
+.start-btn {
+    border: 0;
+    color: white;
+    cursor: pointer;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-family: "Cairo", sans-serif;
+    font-size: 15px;
+    background: linear-gradient(135deg, #45bff0, #7167e8);
+    box-shadow:
+        0 10px 30px rgba(65,180,240,.22),
+        inset 0 1px 0 rgba(255,255,255,.25);
+    transition: .3s ease;
+}
+
+.start-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(65,180,240,.3);
+}
+
+.start-btn:active {
+    transform: scale(.96);
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main {
+    display: none;
+    min-height: 100vh;
+    padding: 30px 18px 70px;
+}
+
+.main.active {
+    display: block;
+    animation: pageIn 1s ease;
+}
+
+@keyframes pageIn {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container {
+    width: min(760px, 100%);
+    margin: auto;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+    text-align: center;
+    padding: 20px 0 30px;
+}
+
+.header .eyebrow {
+    font-size: 12px;
+    color: #9edfff;
+    letter-spacing: 3px;
+    margin-bottom: 10px;
+}
+
+.header h2 {
+    font-family: "Playfair Display", serif;
+    font-size: clamp(30px, 8vw, 48px);
+    font-weight: 500;
+    direction: ltr;
+}
+
+.header h2 span {
+    color: #a8e2ff;
+}
+
+.header p {
+    margin-top: 12px;
+    color: rgba(255,255,255,.58);
+    font-size: 14px;
+}
+
+/* =========================
+   MESSAGE CARD
+========================= */
+
+.message-card {
+    position: relative;
+    padding: clamp(25px, 6vw, 50px);
+    border-radius: 32px;
+    border: 1px solid rgba(255,255,255,.11);
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.075),
+            rgba(255,255,255,.025)
+        );
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    box-shadow:
+        0 30px 90px rgba(0,0,0,.42),
+        inset 0 1px 0 rgba(255,255,255,.08);
+    overflow: hidden;
+}
+
+.message-card::before {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: rgba(85,200,255,.08);
+    filter: blur(45px);
+    top: -80px;
+    right: -60px;
+}
+
+.message-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    direction: ltr;
+    margin-bottom: 28px;
+}
+
+.message-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 15px;
+    display: grid;
+    place-items: center;
+    background: rgba(117,210,255,.09);
+    border: 1px solid rgba(117,210,255,.13);
+    font-size: 21px;
+}
+
+.message-date {
+    font-size: 11px;
+    color: rgba(255,255,255,.4);
+    letter-spacing: 1px;
+}
+
+.message {
+    direction: ltr;
+    text-align: left;
+    font-family: "Playfair Display", serif;
+    font-size: clamp(18px, 4vw, 23px);
+    line-height: 2;
+    color: rgba(255,255,255,.92);
+}
+
+.message::first-letter {
+    color: #9cddff;
+}
+
+/* =========================
+   HIGHLIGHTS
+========================= */
+
+.highlight-box {
+    margin-top: 25px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.highlight {
+    text-align: center;
+    padding: 18px 10px;
+    border-radius: 20px;
+    background: rgba(255,255,255,.035);
+    border: 1px solid rgba(255,255,255,.07);
+    transition: .3s ease;
+}
+
+.highlight:hover {
+    transform: translateY(-4px);
+    background: rgba(255,255,255,.06);
+}
+
+.highlight .emoji {
+    display: block;
+    font-size: 22px;
+    margin-bottom: 7px;
+}
+
+.highlight span:last-child {
+    font-size: 11px;
+    color: rgba(255,255,255,.55);
+}
+
+/* =========================
+   CLOSING
+========================= */
+
+.closing {
+    text-align: center;
+    padding: 55px 15px 25px;
+}
+
+.closing-line {
+    width: 55px;
+    height: 1px;
+    margin: 0 auto 25px;
+    background: linear-gradient(90deg, transparent, #8bdcff, transparent);
+}
+
+.closing h3 {
+    font-family: "Playfair Display", serif;
+    font-size: clamp(27px, 7vw, 42px);
+    font-weight: 500;
+    direction: ltr;
+    margin-bottom: 14px;
+}
+
+.closing h3 span {
+    color: #9edfff;
+}
+
+.closing p {
+    color: rgba(255,255,255,.56);
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+.signature {
+    margin-top: 28px;
+    font-family: "Playfair Display", serif;
+    font-style: italic;
+    color: rgba(255,255,255,.72);
+    direction: ltr;
+    font-size: 17px;
+}
+
+/* =========================
+   MUSIC
+========================= */
+
+.music-button {
+    position: fixed;
+    z-index: 20;
+    left: 18px;
+    bottom: 18px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.13);
+    background: rgba(8,18,31,.7);
+    color: white;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    cursor: pointer;
+    font-size: 17px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    transition: .3s ease;
+}
+
+.music-button:hover {
+    transform: scale(1.07);
+}
+
+.music-button.playing {
+    box-shadow:
+        0 0 0 6px rgba(100,200,255,.06),
+        0 10px 30px rgba(0,0,0,.35);
+}
+
+/* =========================
+   FLOATING PARTICLES
+========================= */
+
+.float-heart {
+    position: fixed;
+    bottom: -30px;
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0;
+    animation: rise 5s linear forwards;
+    color: rgba(150,225,255,.65);
+}
+
+@keyframes rise {
+    0% {
+        transform: translateY(0) translateX(0) scale(.7);
+        opacity: 0;
+    }
+    15% {
+        opacity: .7;
+    }
+    100% {
+        transform: translateY(-110vh) translateX(var(--move)) scale(1.2);
+        opacity: 0;
+    }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .intro-card {
+        padding: 38px 22px;
+        border-radius: 27px;
+    }
+
+    .message-card {
+        border-radius: 27px;
+    }
+
+    .message {
+        font-size: 18px;
+        line-height: 1.95;
+    }
+
+    .highlight-box {
+        gap: 7px;
+    }
+
+    .highlight {
+        padding: 15px 6px;
+    }
+
+    .highlight span:last-child {
+        font-size: 10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     BACKGROUND
+========================= -->
+
+<div class="background">
+    <div class="glow one"></div>
+    <div class="glow two"></div>
+    <div class="glow three"></div>
+    <div class="stars" id="stars"></div>
+</div>
+
+<div class="app">
+
+    <!-- =========================
+         INTRO
+    ========================= -->
+
+    <section class="intro" id="intro">
+
+        <div class="intro-card">
+
+            <div class="small-label">
+                A LITTLE SOMETHING FOR YOU
+            </div>
+
+            <span class="intro-heart">🩵</span>
+
+            <h1>
+                Just for <span>you.</span>
+            </h1>
+
+            <p>
+                في حاجة صغيرة حبيت نخليها هنا...
+                مش مجرد رسالة، بس لحظة حلوة تستاهليها.
+            </p>
+
+            <button class="start-btn" id="startBtn">
+                افتحي الرسالة ✨
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         MAIN EXPERIENCE
+    ========================= -->
+
+    <main class="main" id="main">
+
+        <div class="container">
+
+            <header class="header">
+
+                <div class="eyebrow">
+                    A MESSAGE FROM THE HEART
+                </div>
+
+                <h2>
+                    For <span>Noni</span> 🩵
+                </h2>
+
+                <p>
+                    حاجة بسيطة... لكن معناها كبير.
+                </p>
+
+            </header>
+
+
+            <!-- MESSAGE -->
+
+            <section class="message-card">
+
+                <div class="message-top">
+
+                    <div class="message-icon">
+                        💌
+                    </div>
+
+                    <div class="message-date">
+                        A little reminder
+                    </div>
+
+                </div>
+
+                <div class="message">
+
+                    I just wanted to take a moment to remind you how much you truly mean to me. In a world where people come and go so quickly, having someone as genuine, loyal, and supportive as you in my corner is something I never take for granted. You are much more than just a friend; you're family to me. Thank you for always listening, for standing by me through thick and thin, and for knowing how to put a smile on my face even on my toughest days. No matter where life takes us or how busy things get, I want you to know that you will always have my back, just like I know I always have yours. I truly appreciate everything you do and every moment we share. Stay just the way you are, because you're genuinely one of a kind🩵🩵
+
+                </div>
+
+
+                <div class="highlight-box">
+
+                    <div class="highlight">
+                        <span class="emoji">🤍</span>
+                        <span>Always genuine</span>
+                    </div>
+
+                    <div class="highlight">
+                        <span class="emoji">✨</span>
+                        <span>One of a kind</span>
+                    </div>
+
+                    <div class="highlight">
+                        <span class="emoji">🩵</span>
+                        <span>Always appreciated</span>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- CLOSING -->
+
+            <section class="closing">
+
+                <div class="closing-line"></div>
+
+                <h3>
+                    Stay exactly <span>who you are.</span>
+                </h3>
+
+                <p>
+                    لأن بعض الأشخاص ما يحتاجوش سبب باش يكونوا مميزين...
+                    وجودهم بروحه يكفي.
+                </p>
+
+                <div class="signature">
+                    With appreciation, always 🩵
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- MUSIC -->
+
+<audio id="music" preload="auto" loop>
+    <source src="Olivia Rodrigo.mp3" type="audio/mpeg">
+</audio>
+
+<button
+    class="music-button"
+    id="musicBtn"
+    aria-label="Music">
+    ♪
+</button>
+
+
+<script>
+
+/* =========================
+   STARS
+========================= */
+
+const starsContainer = document.getElementById("stars");
+
+for (let i = 0; i < 90; i++) {
+
+    const star = document.createElement("span");
+
+    star.className = "star";
+
+    star.style.left = Math.random() * 100 + "%";
+    star.style.top = Math.random() * 100 + "%";
+
+    star.style.animationDelay =
+        (Math.random() * 4) + "s";
+
+    star.style.opacity =
+        (Math.random() * .6 + .1);
+
+    starsContainer.appendChild(star);
+}
+
+
+/* =========================
+   MUSIC
+========================= */
+
+const music = document.getElementById("music");
+const musicBtn = document.getElementById("musicBtn");
+
+let musicStarted = false;
+
+function startMusic() {
+
+    if (musicStarted) return;
+
+    music.volume = 0.55;
+
+    const promise = music.play();
+
+    if (promise !== undefined) {
+
+        promise.then(() => {
+
+            musicStarted = true;
+
+            musicBtn.classList.add("playing");
+            musicBtn.textContent = "♫";
+
+        }).catch(() => {
+
+            /*
+             المتصفح منع التشغيل التلقائي.
+             سيتم تشغيل الصوت عند أول تفاعل.
+            */
+
+        });
+
+    }
+}
+
+
+/*
+    نحاول تشغيل الصوت بمجرد فتح الصفحة
+*/
+
+window.addEventListener("load", () => {
+
+    setTimeout(() => {
+        startMusic();
+    }, 300);
+
+});
+
+
+/*
+    fallback للموبايل
+*/
+
+function firstInteraction() {
+
+    if (!musicStarted) {
+        startMusic();
+    }
+
+}
+
+document.addEventListener(
+    "touchstart",
+    firstInteraction,
+    { once: true }
+);
+
+document.addEventListener(
+    "click",
+    firstInteraction,
+    { once: true }
+);
+
+
+/* زر الصوت */
+
+musicBtn.addEventListener("click", (event) => {
+
+    event.stopPropagation();
+
+    if (music.paused) {
+
+        music.play().then(() => {
+
+            musicStarted = true;
+            musicBtn.classList.add("playing");
+            musicBtn.textContent = "♫";
+
+        }).catch(() => {});
+
+    } else {
+
+        music.pause();
+
+        musicBtn.classList.remove("playing");
+        musicBtn.textContent = "♪";
+
+    }
+
+});
+
+
+/* =========================
+   START EXPERIENCE
+========================= */
+
+const startBtn = document.getElementById("startBtn");
+const intro = document.getElementById("intro");
+const main = document.getElementById("main");
+
+startBtn.addEventListener("click", () => {
+
+    /*
+       نضمن تشغيل الموسيقى لأن الضغط
+       يعتبر تفاعل مباشر من المستخدم.
+    */
+
+    if (!musicStarted) {
+
+        music.volume = 0.55;
+
+        music.play().then(() => {
+
+            musicStarted = true;
+            musicBtn.classList.add("playing");
+            musicBtn.textContent = "♫";
+
+        }).catch(() => {});
+
+    }
+
+    intro.classList.add("hide");
+
+    setTimeout(() => {
+
+        intro.style.display = "none";
+
+        main.classList.add("active");
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }, 850);
+
+});
+
+
+/* =========================
+   FLOATING HEARTS
+========================= */
+
+function createHeart() {
+
+    if (
+        document.hidden ||
+        !document.getElementById("main").classList.contains("active")
+    ) return;
+
+    const heart = document.createElement("div");
+
+    heart.className = "float-heart";
+
+    heart.textContent =
+        Math.random() > .5 ? "♡" : "✦";
+
+    heart.style.left =
+        Math.random() * 100 + "vw";
+
+    heart.style.fontSize =
+        (10 + Math.random() * 13) + "px";
+
+    heart.style.setProperty(
+        "--move",
+        (Math.random() * 120 - 60) + "px"
+    );
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+        heart.remove();
+    }, 5200);
+}
+
+setInterval(createHeart, 900);
+
+</script>
+
+</body>
+</html>
